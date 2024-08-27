@@ -1,16 +1,10 @@
-## Hi there 👋
-
-<!--
-**J-Developer-backend/J-Developer-backend** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+#自我介绍
+- 基本信息
+我是广东工业大学22级计算机科学与技术4班的学生。
+- 兴趣爱好
+没事干喜欢打游戏。
+- 学习经历
+  - 熟练掌握Java，C。
+  - 掌握Springboot、MyBatis框架。
+- 获奖
+  - 第15届蓝桥杯省赛B组C/C++ 一等奖
