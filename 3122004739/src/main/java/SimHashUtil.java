@@ -10,14 +10,14 @@ import java.util.Map;
  */
 public class SimHashUtil {
 
-    private static final int hashBits = 64;     // hash的位数
+    public static final int hashBits = 64;     // hash的位数
 
     /**
      * 生成文本指纹
      * @param context 文本
      * @return 文本指纹
      */
-    private static BigInteger simHash(String context) {
+    public static BigInteger simHash(String context) {
         int[] vector = new int[hashBits];
         // 对字符串进行分词
         List<Term> termList = StandardTokenizer.segment(context);
