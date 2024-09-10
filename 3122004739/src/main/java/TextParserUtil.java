@@ -1,5 +1,6 @@
 /**
  * 文本预处理类
+ * @author J
  */
 public class TextParserUtil {
 

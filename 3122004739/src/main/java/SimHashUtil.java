@@ -7,10 +7,11 @@ import java.util.Map;
 
 /**
  * 生成文本指纹类
+ * @author J
  */
 public class SimHashUtil {
-
-    public static final int hashBits = 64;     // hash的位数
+    // hash的位数
+    public static final int HASH_BITS = 64;
 
     /**
      * 生成文本指纹
@@ -18,7 +19,7 @@ public class SimHashUtil {
      * @return 文本指纹
      */
     public static BigInteger simHash(String context) {
-        int[] vector = new int[hashBits];
+        int[] vector = new int[HASH_BITS];
         // 对字符串进行分词
         List<Term> termList = StandardTokenizer.segment(context);
         //对分词的一些特殊处理
@@ -45,7 +46,7 @@ public class SimHashUtil {
             }
             //将每一个分词hash为一组固定长度的数列
             BigInteger t = hash(word);
-            for (int i = 0; i < hashBits; i++) {
+            for (int i = 0; i < HASH_BITS; i++) {
                 BigInteger bitmask = new BigInteger("1").shiftLeft(i);
                 int weight = 1;  //添加权重
                 if (weightOfNature.containsKey(nature)) {
@@ -60,7 +61,7 @@ public class SimHashUtil {
             }
         }
         BigInteger simHash = new BigInteger("0");
-        for (int i = 0; i < hashBits; i++) {
+        for (int i = 0; i < HASH_BITS; i++) {
             if (vector[i] >= 0) {
                 simHash = simHash.add(new BigInteger("1").shiftLeft(i));
             }
@@ -95,7 +96,7 @@ public class SimHashUtil {
         char[] wordCharArray = word.toCharArray();
         BigInteger x = BigInteger.valueOf(((long) wordCharArray[0]) << 7);
         BigInteger m = new BigInteger("1000003");
-        BigInteger mask = new BigInteger("2").pow(hashBits).subtract(new BigInteger("1"));
+        BigInteger mask = new BigInteger("2").pow(HASH_BITS).subtract(new BigInteger("1"));
         for (char item : wordCharArray) {
             BigInteger temp = BigInteger.valueOf(item);
             x = x.multiply(m).xor(temp).and(mask);

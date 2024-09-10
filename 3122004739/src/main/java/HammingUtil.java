@@ -10,9 +10,9 @@ public class HammingUtil {
      * @param simHash2 文本2的文本指纹
      * @return 海明距离
      */
-    public int hammingDistance(BigInteger simHash1, BigInteger simHash2) {
+    public static int hammingDistance(BigInteger simHash1, BigInteger simHash2) {
         BigInteger m = new BigInteger("1")
-                .shiftLeft(SimHashUtil.hashBits)
+                .shiftLeft(SimHashUtil.HASH_BITS)
                 .subtract(new BigInteger("1"));
         BigInteger x = simHash1.xor(simHash2).and(m);
         int distance = 0;
@@ -28,7 +28,7 @@ public class HammingUtil {
      * @param distance 海明距离
      * @return  相似度
      **/
-    public static double getSemblance(int distance) {
-        return 1 - (double) distance / SimHashUtil.hashBits;
+    public static double getSimilarity(int distance) {
+        return 1 - (double) distance / SimHashUtil.HASH_BITS;
     }
 }

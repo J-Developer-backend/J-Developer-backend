@@ -5,12 +5,13 @@ import java.io.IOException;
 
 /**
  * 文件读写类
+ * @author J
  */
-public class FileIO {
+public class FileInterface {
     private final String originFileName;
     private final String copyFileName;
     private final String answerFileName;
-    public FileIO(String originFileName, String copyFileName, String answerFileName) {
+    public FileInterface(String originFileName, String copyFileName, String answerFileName) {
         this.originFileName = originFileName;
         this.copyFileName = copyFileName;
         this.answerFileName = answerFileName;
