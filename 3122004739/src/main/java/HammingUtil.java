@@ -2,6 +2,7 @@ import java.math.BigInteger;
 
 /**
  * 计算海明距离以及相似度
+ * @author J
  */
 public class HammingUtil {
     /**

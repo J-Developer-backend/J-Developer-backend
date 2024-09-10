@@ -10,8 +10,12 @@ import java.util.Map;
  * @author J
  */
 public class SimHashUtil {
-    // hash的位数
+    /**
+     * 文本指纹hash的位数
+     */
     public static final int HASH_BITS = 64;
+    private static final int MIN_WORD_LENGTH = 3;
+    private static final String HASH_LMT = "-1";
 
     /**
      * 生成文本指纹
@@ -22,33 +26,42 @@ public class SimHashUtil {
         int[] vector = new int[HASH_BITS];
         // 对字符串进行分词
         List<Term> termList = StandardTokenizer.segment(context);
-        //对分词的一些特殊处理
-        Map<String, Integer> weightOfNature = new HashMap<>();       // 词性的权重
-        weightOfNature.put("n", 2);     //给名词的权重是2;
-        Map<String, String> stopNatures = new HashMap<>();      // 停用的词性
-        stopNatures.put("w", "");       //停用标点符号
-        int overCount = 50;      //设定超频词汇的界限;
-        Map<String, Integer> wordCount = new HashMap<>();
+        //词性的权重
+        Map<String, Integer> weightOfNature = new HashMap<>(16);
+        //给名词的权重是2
+        weightOfNature.put("n", 2);
+        // 停用的词性
+        Map<String, String> stopNatures = new HashMap<>(16);
+        //停用标点符号
+        stopNatures.put("w", "");
+        //设定超频词汇的界限
+        int overCount = 50;
+        Map<String, Integer> wordCount = new HashMap<>(16);
         for (Term term : termList) {
-            String word = term.word;        //分词字符串
-            String nature = term.nature.toString();         // 分词属性;
+            //分词字符串
+            String word = term.word;
+            // 分词属性
+            String nature = term.nature.toString();
             if (wordCount.containsKey(word)) {
                 int count = wordCount.get(word);
-                if (count > overCount) {         //超频词过滤
+                //超频词过滤
+                if (count > overCount) {
                     continue;
                 }
                 wordCount.put(word, count + 1);
             } else {
                 wordCount.put(word, 1);
             }
-            if (stopNatures.containsKey(nature)) {      // 过滤停用词性
+            // 过滤停用词性
+            if (stopNatures.containsKey(nature)) {
                 continue;
             }
             //将每一个分词hash为一组固定长度的数列
             BigInteger t = hash(word);
             for (int i = 0; i < HASH_BITS; i++) {
                 BigInteger bitmask = new BigInteger("1").shiftLeft(i);
-                int weight = 1;  //添加权重
+                //添加权重
+                int weight = 1;
                 if (weightOfNature.containsKey(nature)) {
                     weight = weightOfNature.get(nature);
                 }
@@ -79,7 +92,7 @@ public class SimHashUtil {
         } else {
             //word 的长度过短，会导致hash算法失效，因此需要对过短的词补偿
             StringBuilder wordBuilder = new StringBuilder(word);
-            while (wordBuilder.length() < 3) {
+            while (wordBuilder.length() < MIN_WORD_LENGTH) {
                 wordBuilder.append(wordBuilder.charAt(0));
             }
             word = wordBuilder.toString();
@@ -102,7 +115,7 @@ public class SimHashUtil {
             x = x.multiply(m).xor(temp).and(mask);
         }
         x = x.xor(new BigInteger(String.valueOf(word.length())));
-        if (x.equals(new BigInteger("-1"))) {
+        if (x.equals(new BigInteger(HASH_LMT))) {
             x = new BigInteger("-2");
         }
         return x;

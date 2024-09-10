@@ -1,6 +1,10 @@
 import java.io.IOException;
 import java.math.BigInteger;
 
+/**
+ * 主函数
+ * @author J
+ */
 public class Main {
 
     public static void main(String[] args) {
@@ -10,12 +14,12 @@ public class Main {
         String answerFileName = args[2];
 
         //文件读写对象
-        FileInterface fileIO = new FileInterface(originFileName, copyFileName, answerFileName);
+        FileInterface fileInterface = new FileInterface(originFileName, copyFileName, answerFileName);
 
         try {
             // 原文件和抄袭文件文本读取
-            String originText = fileIO.readOriginFile();
-            String copyText = fileIO.readCopyFile();
+            String originText = fileInterface.readOriginFile();
+            String copyText = fileInterface.readCopyFile();
 
             // 文本预处理
             String originContext = TextParserUtil.clean(originText);
@@ -32,7 +36,7 @@ public class Main {
             double similarity = HammingUtil.getSimilarity(hammingDistance);
 
             // 将相似度写入答案文件
-            fileIO.writeAnswerFile(similarity);
+            fileInterface.writeAnswerFile(similarity);
 
         } catch (IOException e) {
             System.err.println("文件路径错误");
