@@ -1,6 +1,11 @@
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+
+/**
+ * 文件读写类
+ */
 public class FileIO {
     private final String originFileName;
     private final String copyFileName;
@@ -25,7 +30,20 @@ public class FileIO {
         while ((numRead = fis.read(buffer, 0, buffer.length)) != -1) {
             sb.append(new String(buffer, 0, numRead));
         }
+        fis.close();
         return sb.toString();
+    }
+
+    /**
+     * 写出重复率
+     * @param repetitionRate 重复率
+     * @throws IOException 异常
+     */
+    public void writeAnswerFile(double repetitionRate) throws IOException {
+        FileOutputStream fos = new FileOutputStream(answerFileName);
+        String answer = String.format("%.2f", repetitionRate);
+        fos.write(answer.getBytes());
+        fos.close();
     }
 
     /**
