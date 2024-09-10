@@ -13,9 +13,9 @@ public class FileIO {
 
     /**
      * 文件读取
-     * @param fileName
-     * @return
-     * @throws IOException
+     * @param fileName 文件名
+     * @return 文件内容
+     * @throws IOException 读取异常
      */
     private String readFile(String fileName) throws IOException {
         FileInputStream fis = new FileInputStream(fileName);
@@ -26,5 +26,23 @@ public class FileIO {
             sb.append(new String(buffer, 0, numRead));
         }
         return sb.toString();
+    }
+
+    /**
+     * 获取源文件
+     * @return 文件内容
+     * @throws IOException 读取异常
+     */
+    public String readOriginFile() throws IOException {
+        return readFile(originFileName);
+    }
+
+    /**
+     * 获取源文件
+     * @return 文件内容
+     * @throws IOException 读取异常
+     */
+    public String readCopyFile() throws IOException {
+        return readFile(copyFileName);
     }
 }
