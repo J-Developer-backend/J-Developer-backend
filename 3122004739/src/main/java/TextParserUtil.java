@@ -10,8 +10,9 @@ public class TextParserUtil {
      * @return 处理后的文本
      */
     public static String clean(String text) {
-        String punctuationRegex = "[，。/；’【】、·！《》？：“{}|@#￥%…^&*+—.?!~`\"';:\n\r]+";
+        String punctuationRegex = "[，。/；’【】、·！《》？：“”{}|@#￥%…^&*+—.?!~`\"';:\n\r\t]+";
         text = text.replaceAll(punctuationRegex, "");
+        text = text.replaceAll(" ", "");
         return text;
     }
 

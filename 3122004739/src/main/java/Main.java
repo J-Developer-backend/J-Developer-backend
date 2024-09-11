@@ -25,6 +25,7 @@ public class Main {
             String originContext = TextParserUtil.clean(originText);
             String copyContext = TextParserUtil.clean(copyText);
 
+
             // 生成文本指纹
             BigInteger originSimHash = SimHashUtil.simHash(originContext);
             BigInteger copySimHash = SimHashUtil.simHash(copyContext);
