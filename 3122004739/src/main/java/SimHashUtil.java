@@ -57,7 +57,7 @@ public class SimHashUtil {
                 continue;
             }
             //将每一个分词hash为一组固定长度的数列
-            BigInteger t = hash(word);
+            BigInteger hash = hash(word);
             for (int i = 0; i < HASH_BITS; i++) {
                 BigInteger bitmask = new BigInteger("1").shiftLeft(i);
                 //添加权重
@@ -65,7 +65,7 @@ public class SimHashUtil {
                 if (weightOfNature.containsKey(nature)) {
                     weight = weightOfNature.get(nature);
                 }
-                if (t.and(bitmask).signum() != 0) {
+                if (hash.and(bitmask).signum() != 0) {
                     // 这里是计算整个文档的所有特征的向量和
                     vector[i] += weight;
                 } else {

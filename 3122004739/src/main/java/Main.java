@@ -42,7 +42,5 @@ public class Main {
         } catch (IOException e) {
             System.err.println("文件路径错误");
         }
-
-
     }
 }

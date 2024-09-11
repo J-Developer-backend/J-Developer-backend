@@ -1,6 +1,4 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 
 /**
@@ -41,8 +39,8 @@ public class FileInterface {
      * @throws IOException 异常
      */
     public void writeAnswerFile(double repetitionRate) throws IOException {
-        FileOutputStream fos = new FileOutputStream(answerFileName);
-        String answer = String.format("%.2f", repetitionRate);
+        FileOutputStream fos = new FileOutputStream(answerFileName, true);
+        String answer = String.format("%.2f\n", repetitionRate);
         fos.write(answer.getBytes());
         fos.close();
     }
