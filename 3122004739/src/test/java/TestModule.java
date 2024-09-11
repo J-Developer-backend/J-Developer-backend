@@ -49,7 +49,7 @@ public class TestModule {
             double similarity = HammingUtil.getSimilarity(hammingDistance);
 
             // 将相似度输出
-            fileInterface.writeAnswerFile(similarity);
+            fileInterface.writeAnswerFile(similarity, true);
             System.out.println("原文件：" + originFileName);
             System.out.println("抄袭文件：" + copyFileName.getAbsolutePath());
             System.out.println("重复率：" + similarity);

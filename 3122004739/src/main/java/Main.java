@@ -37,7 +37,7 @@ public class Main {
             double similarity = HammingUtil.getSimilarity(hammingDistance);
 
             // 将相似度写入答案文件
-            fileInterface.writeAnswerFile(similarity);
+            fileInterface.writeAnswerFile(similarity, false);
 
         } catch (IOException e) {
             System.err.println("文件路径错误");

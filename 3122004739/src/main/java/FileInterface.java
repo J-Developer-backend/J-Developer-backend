@@ -38,11 +38,14 @@ public class FileInterface {
      * @param repetitionRate 重复率
      * @throws IOException 异常
      */
-    public void writeAnswerFile(double repetitionRate) throws IOException {
-        FileOutputStream fos = new FileOutputStream(answerFileName, true);
+    public void writeAnswerFile(double repetitionRate, boolean mode) throws IOException {
+        FileOutputStream fos = getFileOutputStream(answerFileName, mode);
         String answer = String.format("%.2f\n", repetitionRate);
         fos.write(answer.getBytes());
         fos.close();
+    }
+    private FileOutputStream getFileOutputStream(String fileName, boolean mode) throws IOException {
+        return new FileOutputStream(fileName, mode);
     }
 
     /**
