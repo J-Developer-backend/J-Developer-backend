@@ -53,7 +53,8 @@ public class ExpressionUtil {
      * @param expression 表达式
      * @return 表达式的字符串
      */
-    private static String getString(Expression expression) {
+    public static String getString(Expression expression) {
+        if (expression == null) return null;
         if (expression.isValue()) {
             return String.valueOf(expression.getValue());
         } else if (expression.isFraction()) {
@@ -82,6 +83,11 @@ public class ExpressionUtil {
         if (hasParentheses) {
             leftParenthesesIndex = RandomUtil.randInt(1, expressionNum - 1);
             rightParenthesesIndex = RandomUtil.randInt(leftParenthesesIndex + 1, expressionNum);
+        }
+        //如果括号括住整个表达式则不需要加括号
+        if (leftParenthesesIndex == 1 && rightParenthesesIndex == expressionNum) {
+            leftParenthesesIndex = -1;
+            rightParenthesesIndex = -1;
         }
         //逐个生成运算数以及运算符，并根据需要添加括号
         for (int i = 1; i <= expressionNum ; i++) {
@@ -123,6 +129,7 @@ public class ExpressionUtil {
      * @return 四则运算题目
      */
     public static String parseExpression(List<Expression> expressionList) {
+        if (expressionList == null || expressionList.isEmpty()) return null;
         StringBuilder expressionStr = new StringBuilder();
         for (Expression expression : expressionList) {
             expressionStr.append(getString(expression));
