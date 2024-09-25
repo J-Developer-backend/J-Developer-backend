@@ -43,20 +43,12 @@ public class Test {
 
     @org.junit.Test
     public void test3() {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(5);
-        list.add(2, 22);
-        System.out.println(list);
-        list.add(2, 222);
-        System.out.println(list);
-
-        HashMap<Integer, Integer> map = new HashMap<>();
-        map.put(1, 1);
-        System.out.println(map.get(2));
+        String a = "a1a1";
+        String[] split = a.split("1");
+        for (int i = 0; i < split.length; i++) {
+            System.out.println(split[i]);
+        }
+        System.out.println(split.length);
     }
 
 }

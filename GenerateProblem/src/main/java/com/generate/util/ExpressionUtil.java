@@ -137,4 +137,86 @@ public class ExpressionUtil {
         return expressionStr.toString();
     }
 
+    /**
+     * 将四则运算表达式抽象成表达式集合对象
+     * @param expressionStr 四则运算表达式
+     * @return 表达式集合对象
+     */
+    public static List<Expression> parseExpression(String expressionStr) {
+        List<Expression> expressionList = new ArrayList<>();
+        if (expressionStr == null || expressionStr.isEmpty()) return null;
+        String[] expressions = expressionStr.split(" ");
+        for (String valueStr : expressions) {
+            Expression expression;
+            if (valueStr.contains("/")) {
+                expression = parseFraction(valueStr);
+            } else if (valueStr.equals(SignConstant.LEFT_PARENTHESES)) {
+                expression = getSign(SignConstant.LEFT_PARENTHESES);
+            } else if (valueStr.equals(SignConstant.RIGHT_PARENTHESES)) {
+                expression = getSign(SignConstant.RIGHT_PARENTHESES);
+            } else if (valueStr.equals(SignConstant.EQUAL)) {
+                expression = getSign(SignConstant.EQUAL);
+            } else if (valueStr.equals(SignConstant.PLUS)) {
+                expression = getSign(SignConstant.PLUS);
+            } else if (valueStr.equals(SignConstant.MINUS)) {
+                expression = getSign(SignConstant.MINUS);
+            } else if (valueStr.equals(SignConstant.MULTIPLY)) {
+                expression = getSign(SignConstant.MULTIPLY);
+            } else if (valueStr.equals(SignConstant.DIVIDE)) {
+                expression = getSign(SignConstant.DIVIDE);
+            } else {
+                expression = parseValue(valueStr);
+            }
+            expressionList.add(expression);
+        }
+        return expressionList;
+    }
+
+    /**
+     * 自然数抽象成表达式
+     * @param valueStr 自然数
+     * @return 表达式
+     */
+    public static Expression parseValue(String valueStr) {
+        int value = Integer.parseInt(valueStr);
+        return new Expression(true, false, false, value, 0, 1, null);
+    }
+
+    /**
+     * 真分数数抽象成表达式
+     * @param fractionStr 真分数数
+     * @return 表达式
+     */
+    public static Expression parseFraction(String fractionStr) {
+        StringBuilder valueStr = new StringBuilder();
+        StringBuilder numeratorStr = new StringBuilder();
+        StringBuilder denominatorStr = new StringBuilder();
+        boolean hasValue = fractionStr.contains("’"), hasNumerator = false;
+        if (!hasValue) {
+            valueStr.append("0");
+        }
+        for (int i = 0; i < fractionStr.length(); i++) {
+            if (fractionStr.charAt(i) == '‘') {
+                hasValue = false;
+                hasNumerator = true;
+                continue;
+            }
+            if (fractionStr.charAt(i) == '/') {
+                hasNumerator = false;
+                continue;
+            }
+            if (hasValue) {
+                valueStr.append(fractionStr.charAt(i));
+            } else if (hasNumerator) {
+                numeratorStr.append(fractionStr.charAt(i));
+            } else {
+                denominatorStr.append(fractionStr.charAt(i));
+            }
+        }
+        int value = Integer.parseInt(valueStr.toString());
+        int numerator = Integer.parseInt(numeratorStr.toString());
+        int denominator = Integer.parseInt(denominatorStr.toString());
+        return new Expression(false, true, false, value, numerator, denominator, null);
+    }
+
 }
