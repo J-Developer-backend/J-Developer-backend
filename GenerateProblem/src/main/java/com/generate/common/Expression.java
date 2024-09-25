@@ -1,5 +1,7 @@
 package com.generate.common;
 
+import java.util.Objects;
+
 public class Expression {
 
     private final boolean isValue;    //自然数标志
@@ -48,4 +50,25 @@ public class Expression {
         return operationSign;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(isValue, isFraction, isOperationSign, value, numerator, denominator, operationSign);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Expression other = (Expression) obj;
+        if (isValue) {
+            return other.isValue && value == other.value;
+        }
+        if (isFraction) {
+            return other.isFraction && value == other.value && numerator == other.numerator && denominator == other.denominator;
+        }
+        if (isOperationSign) {
+            return other.isOperationSign && operationSign.equals(other.operationSign);
+        }
+        return false;
+    }
 }

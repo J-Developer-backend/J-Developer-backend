@@ -8,14 +8,14 @@ import java.util.List;
 
 public class ExpressionUtil {
 
-    private static final String[] signs = {SignConstant.PLUS, SignConstant.MINUS, SignConstant.MULTIPLY, SignConstant.DIVIDE};
+    public static final String[] signs = {SignConstant.PLUS, SignConstant.MINUS, SignConstant.MULTIPLY, SignConstant.DIVIDE};
 
     /**
      * 生成由limitSize限制的自然数
      * @param limitSize 限制范围
      * @return 自然数表达式
      */
-    private static Expression getValue(int limitSize) {
+    public static Expression getValue(int limitSize) {
         int value = RandomUtil.randInt(0, limitSize - 1);
         int numerator = 0;
         int denominator = 1;
@@ -27,7 +27,7 @@ public class ExpressionUtil {
      * @param limitSize 限制范围
      * @return 真分数表达式
      */
-    private static Expression getFraction(int limitSize) {
+    public static Expression getFraction(int limitSize) {
         int value = RandomUtil.randInt(0, limitSize - 1);
         int denominator = RandomUtil.randInt(2, limitSize - 1);
         int numerator = RandomUtil.randInt(1, denominator - 1);
@@ -44,7 +44,7 @@ public class ExpressionUtil {
      * @param sign 符号
      * @return 符号表达式
      */
-    private static Expression getSign(String sign) {
+    public static Expression getSign(String sign) {
         return new Expression(false, false,true, 0, 0, 0, sign);
     }
 
@@ -128,7 +128,7 @@ public class ExpressionUtil {
      * @param expressionList 表达式集合
      * @return 四则运算题目
      */
-    public static String parseExpression(List<Expression> expressionList) {
+    public static String parseString(List<Expression> expressionList) {
         if (expressionList == null || expressionList.isEmpty()) return null;
         StringBuilder expressionStr = new StringBuilder();
         for (Expression expression : expressionList) {

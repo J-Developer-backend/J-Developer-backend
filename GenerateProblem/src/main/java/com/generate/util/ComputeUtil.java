@@ -56,7 +56,7 @@ public class ComputeUtil {
      * @param expressions 原表达式
      * @return 后缀表达式
      */
-    private static List<Expression> getExpressionsRPN(List<Expression> expressions) {
+    public static List<Expression> getExpressionsRPN(List<Expression> expressions) {
         if (expressions == null || expressions.isEmpty()) {
             return null;
         }
@@ -127,7 +127,7 @@ public class ComputeUtil {
      * @param expressions 后缀表达式
      * @return 计算结果，null表示不合法
      */
-    private static Expression computeRPN(List<Expression> expressions) {
+    public static Expression computeRPN(List<Expression> expressions) {
         if (expressions == null || expressions.isEmpty()) {
             return null;
         }
@@ -163,7 +163,7 @@ public class ComputeUtil {
      * @param denominator 分母
      * @return 表达式，null表示不合法
      */
-    private static Expression getFraction(int numerator, int denominator) {
+    public static Expression getFraction(int numerator, int denominator) {
         if (numerator < 0) {
             return null;
         }
@@ -185,7 +185,7 @@ public class ComputeUtil {
      * @param ex2 表达式2
      * @return 计算结果，null表示不合法
      */
-    private static Expression plus(Expression ex1, Expression ex2) {
+    public static Expression plus(Expression ex1, Expression ex2) {
         int newDenominator = lcm(ex1.getDenominator(), ex2.getDenominator());
         int newNumerator = (ex1.getValue() * ex1.getDenominator() + ex1.getNumerator()) * (newDenominator / ex1.getDenominator())
                 + (ex2.getValue() * ex2.getDenominator() + ex2.getNumerator()) * (newDenominator / ex2.getDenominator());
@@ -198,7 +198,7 @@ public class ComputeUtil {
      * @param ex2 表达式2
      * @return 计算结果，null表示不合法
      */
-    private static Expression minus(Expression ex1, Expression ex2) {
+    public static Expression minus(Expression ex1, Expression ex2) {
         int newDenominator = lcm(ex1.getDenominator(), ex2.getDenominator());
         int newNumerator = (ex1.getValue() * ex1.getDenominator() + ex1.getNumerator()) * (newDenominator / ex1.getDenominator())
                 - (ex2.getValue() * ex2.getDenominator() + ex2.getNumerator()) * (newDenominator / ex2.getDenominator());
@@ -211,7 +211,7 @@ public class ComputeUtil {
      * @param ex2 表达式2
      * @return 计算结果，null表示不合法
      */
-    private static Expression multiply(Expression ex1, Expression ex2) {
+    public static Expression multiply(Expression ex1, Expression ex2) {
         int newDenominator = ex1.getDenominator() * ex2.getDenominator();
         int newNumerator = (ex1.getValue() * ex1.getDenominator() + ex1.getNumerator()) * (ex2.getValue() * ex2.getDenominator() + ex2.getNumerator());
         return getFraction(newNumerator, newDenominator);
@@ -223,7 +223,7 @@ public class ComputeUtil {
      * @param ex2 表达式2
      * @return 计算结果，null表示不合法
      */
-    private static Expression divide(Expression ex1, Expression ex2) {
+    public static Expression divide(Expression ex1, Expression ex2) {
         if (ex2.getValue() == 0 && ex2.getNumerator() == 0) {
             return null;
         }
