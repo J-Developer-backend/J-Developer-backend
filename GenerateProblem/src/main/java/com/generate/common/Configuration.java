@@ -2,10 +2,10 @@ package com.generate.common;
 
 public class Configuration {
 
-    private int n;
-    private int r;
-    private String e;
-    private String a;
+    private final int n;
+    private final int r;
+    private final String e;
+    private final String a;
 
     public Configuration(int n, int r, String e, String a) {
         this.n = n;
@@ -17,7 +17,7 @@ public class Configuration {
     /**
      * 解析参数
      * @param paramStr 参数
-     * @return
+     * @return 参数对象
      */
     public static Configuration parseConfiguration(String paramStr) {
         String[] params = paramStr.split(" ");

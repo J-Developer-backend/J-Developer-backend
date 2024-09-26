@@ -5,6 +5,7 @@ import com.generate.common.Expression;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class FileUtil {
 
@@ -74,6 +75,36 @@ public class FileUtil {
                 fos.write(problem.getBytes());
                 id++;
             }
+            fos.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(filePath + "不存在");
+        } catch (IOException e) {
+            System.out.println("文件输出异常");
+        }
+    }
+
+    /**
+     * 输出题目正误统计
+     * @param filePath 答案路径
+     * @param correctList 正确题号
+     * @param wrongList 错误题号
+     */
+    public static void writeAnswer(String filePath, List<Integer> correctList, List<Integer> wrongList) {
+        StringJoiner sj1 = new StringJoiner("，", "(", ")");
+        StringJoiner sj2 = new StringJoiner("，", "(", ")");
+        for (Integer id : correctList) {
+            sj1.add(id + "");
+        }
+        for (Integer id : wrongList) {
+            sj2.add(id + "");
+        }
+        String correct = "Correct：" + correctList.size() + sj1 + "\n";
+        String wrong = "Wrong：" + wrongList.size() + sj2 + "\n";
+        deleteFile(filePath);
+        try {
+            FileOutputStream fos = new FileOutputStream(filePath, true);
+            fos.write(correct.getBytes());
+            fos.write(wrong.getBytes());
             fos.close();
         } catch (FileNotFoundException e) {
             System.out.println(filePath + "不存在");
