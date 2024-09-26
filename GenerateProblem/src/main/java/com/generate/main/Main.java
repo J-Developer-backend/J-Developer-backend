@@ -2,21 +2,28 @@ package com.generate.main;
 
 import com.generate.common.Configuration;
 import com.generate.common.Expression;
-import com.generate.exception.ConfigurationException;
+import com.generate.exception.ConfigurationNumberException;
 import com.generate.exception.NumberOrLimitException;
 import com.generate.exception.ProblemException;
+import com.generate.util.CheckUtil;
 import com.generate.util.ComputeUtil;
 import com.generate.util.ExpressionUtil;
 import com.generate.util.FileUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
+    //存放题目
     private static final List<List<Expression>> problems = new ArrayList<>();
+    //存放答案
     private static final List<Expression> answers = new ArrayList<>();
+    //存放正确的题号
     private static final List<Integer> correct = new ArrayList<>();
+    //存放错误的题号
     private static final List<Integer> wrong = new ArrayList<>();
 
     /**
@@ -25,34 +32,39 @@ public class Main {
      */
     public static void main(String[] args) {
         try {
+            //获取参数
             Configuration configuration = Configuration.parseConfiguration(args);
+            //判断需求，生成题目or检查答案
             if (configuration.getE() == null && configuration.getA() == null) {
+                //生成题目
                 generateProblem(configuration.getN(), configuration.getR());
-                write();
+                //将题目输出到文件中
+                FileUtil.writeProblem("Exercises.txt", problems);
+                FileUtil.writeAnswer("Answers.txt", answers);
             } else {
-                List<String> problemStrings = read(configuration.getE());
-                List<String> answerStrings = read(configuration.getA());
-                for (String problemString : problemStrings) {
-                    problems.add(ExpressionUtil.parseExpression(problemString));
-                }
-                for (String answerString : answerStrings) {
-                    answers.add(ExpressionUtil.parseOneExpression(answerString));
-                }
+                //读取题目和答案
+                read(configuration.getE(), configuration.getA());
+                //将所给题目重新计算
                 for (int i = 0; i < problems.size(); i++) {
-                    Expression expression = ComputeUtil.computeExpression(problems.get(i));
-                    if (expression != null) {
-                        if (expression.equals(answers.get(i))) {
+                    Expression correctAnswer = ComputeUtil.computeExpression(problems.get(i));
+                    //判断所给题目是否能计算出结果
+                    if (correctAnswer != null) {
+                        //比对答案
+                        if (correctAnswer.equals(answers.get(i))) {
+                            //正确
                             correct.add(i + 1);
                         } else {
+                            //错误
                             wrong.add(i + 1);
                         }
                     } else {
                         throw new ProblemException("提供的题目不合理");
                     }
                 }
+                //将统计结果输出到文件
                 FileUtil.writeResult("Grade.txt", correct, wrong);
             }
-        } catch (ConfigurationException | NumberOrLimitException | ProblemException e) {
+        } catch (ConfigurationNumberException | NumberOrLimitException | ProblemException e) {
             throw new RuntimeException(e);
         }
     }
@@ -64,40 +76,52 @@ public class Main {
      * @throws NumberOrLimitException 参数不合理异常
      */
     public static void generateProblem(int n, int r) throws NumberOrLimitException {
+        //缓存答案以及题目，用于判重
+        Map<Expression, List<List<Expression>>> problemMap = new HashMap<>();
         int num = 0, total = 0, failed = 0;
         while (num < n) {
             List<Expression> problem = ExpressionUtil.generateExpression(r);
             Expression answer = ComputeUtil.computeExpression(problem);
-            //TODO 校验
-            if (answer != null) {
+            //校验：判合理以及判重
+            if (answer != null && !CheckUtil.checkExpression(problem, problemMap.get(answer))) {
                 problems.add(problem);
                 answers.add(answer);
+                List<List<Expression>> sameAnswerProblems = problemMap.get(answer);
+                if (sameAnswerProblems == null) {
+                    sameAnswerProblems = new ArrayList<>();
+                    sameAnswerProblems.add(problem);
+                    problemMap.put(answer, sameAnswerProblems);
+                } else {
+                    sameAnswerProblems.add(problem);
+                }
                 num++;
             } else {
                 failed++;
             }
             total++;
-            if (1.0 * failed / total > 0.5) {
-                throw new NumberOrLimitException("题目生成不良率达到0.5，所以r值不合理，以至于不能生成指定数量的题目");
+            //题目生成可行性判断
+            if (1.0 * failed / total > 0.8) {
+                throw new NumberOrLimitException("题目生成不良率达到0.8，所以r值不合理，以至于不能生成指定数量的题目，更改n、r值或重新运行");
             }
         }
+        System.out.println("不良率：" + 1.0 * failed / total);
     }
 
-    /**
-     * 输出题目和答案
-     */
-    public static void write() {
-        FileUtil.writeProblem("Exercises.tx", problems);
-        FileUtil.writeAnswer("Answers.txt", answers);
-    }
 
     /**
      * 读取题目
-     * @param path 题目文件路径
-     * @return 题目字符串集合
+     * @param problemPath 题目文件路径
+     * @param answerPath 答案文件路径
      */
-    public static List<String> read(String path) {
-        return FileUtil.readProblem(path);
+    public static void read(String problemPath, String answerPath) {
+        List<String> problemStrings = FileUtil.readProblemOrAnswer(problemPath);
+        List<String> answerStrings = FileUtil.readProblemOrAnswer(answerPath);
+        for (String problemString : problemStrings) {
+            problems.add(ExpressionUtil.parseExpression(problemString));
+        }
+        for (String answerString : answerStrings) {
+            answers.add(ExpressionUtil.parseOneExpression(answerString));
+        }
     }
 
 }

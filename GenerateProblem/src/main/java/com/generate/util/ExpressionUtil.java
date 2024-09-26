@@ -147,8 +147,20 @@ public class ExpressionUtil {
         if (expressionStr == null || expressionStr.isEmpty()) return null;
         String[] expressions = expressionStr.split(" ");
         for (String valueStr : expressions) {
+            boolean addRightParentheses = false;
             if (valueStr == null || valueStr.isEmpty()) continue;
+            if (valueStr.contains(SignConstant.LEFT_PARENTHESES)) {
+                expressionList.add(getSign(SignConstant.LEFT_PARENTHESES));
+                valueStr = valueStr.replace(SignConstant.LEFT_PARENTHESES, "");
+            }
+            if (valueStr.contains(SignConstant.RIGHT_PARENTHESES)) {
+                addRightParentheses = true;
+                valueStr = valueStr.replace(SignConstant.RIGHT_PARENTHESES, "");
+            }
             expressionList.add(parseOneExpression(valueStr));
+            if (addRightParentheses) {
+                expressionList.add(getSign(SignConstant.RIGHT_PARENTHESES));
+            }
         }
         return expressionList;
     }
@@ -158,19 +170,15 @@ public class ExpressionUtil {
         valueStr = valueStr.replaceAll(" ", "");
         if (valueStr.contains("/")) {
             expression = parseFraction(valueStr);
-        } else if (valueStr.equals(SignConstant.LEFT_PARENTHESES)) {
-            expression = getSign(SignConstant.LEFT_PARENTHESES);
-        } else if (valueStr.equals(SignConstant.RIGHT_PARENTHESES)) {
-            expression = getSign(SignConstant.RIGHT_PARENTHESES);
-        } else if (valueStr.equals(SignConstant.EQUAL)) {
+        } else if (valueStr.equals(SignConstant.EQUAL.replaceAll(" ", ""))) {
             expression = getSign(SignConstant.EQUAL);
-        } else if (valueStr.equals(SignConstant.PLUS)) {
+        } else if (valueStr.equals(SignConstant.PLUS.replaceAll(" ", ""))) {
             expression = getSign(SignConstant.PLUS);
-        } else if (valueStr.equals(SignConstant.MINUS)) {
+        } else if (valueStr.equals(SignConstant.MINUS.replaceAll(" ", ""))) {
             expression = getSign(SignConstant.MINUS);
-        } else if (valueStr.equals(SignConstant.MULTIPLY)) {
+        } else if (valueStr.equals(SignConstant.MULTIPLY.replaceAll(" ", ""))) {
             expression = getSign(SignConstant.MULTIPLY);
-        } else if (valueStr.equals(SignConstant.DIVIDE)) {
+        } else if (valueStr.equals(SignConstant.DIVIDE.replaceAll(" ", ""))) {
             expression = getSign(SignConstant.DIVIDE);
         } else {
             expression = parseValue(valueStr);
@@ -201,6 +209,7 @@ public class ExpressionUtil {
         boolean hasValue = fractionStr.contains("'"), hasNumerator = false;
         if (!hasValue) {
             valueStr.append("0");
+            hasNumerator = true;
         }
         for (int i = 0; i < fractionStr.length(); i++) {
             if (fractionStr.charAt(i) == '\'') {

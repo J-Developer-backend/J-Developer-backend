@@ -1,15 +1,16 @@
 package com.generate.common;
 
-import com.generate.exception.ConfigurationException;
+import com.generate.exception.ConfigurationNumberException;
 
 public class Configuration {
+
 
     private final int n;
     private final int r;
     private final String e;
     private final String a;
 
-    public Configuration(int n, int r, String e, String a) {
+    public Configuration(int n, int r, String e, String a) throws ConfigurationNumberException {
         this.n = n;
         this.r = r;
         this.e = e;
@@ -21,9 +22,9 @@ public class Configuration {
      * @param params 参数
      * @return 参数对象
      */
-    public static Configuration parseConfiguration(String[] params) throws ConfigurationException {
+    public static Configuration parseConfiguration(String[] params) throws ConfigurationNumberException {
         if (params.length % 2 != 0) {
-            throw new ConfigurationException("Wrong number of parameters");
+            throw new ConfigurationNumberException("参数异常");
         }
         int n = -1, r = -1;
         String e = null, a = null;
@@ -33,13 +34,14 @@ public class Configuration {
                 case "-r" -> r = Integer.parseInt(params[i + 1]);
                 case "-e" -> e = params[i + 1];
                 case "-a" -> a = params[i + 1];
-                default -> {
-                    throw new ConfigurationException("Wrong number of parameters");
-                }
+                default -> throw new ConfigurationNumberException("参数异常");
             }
         }
+        if ((r == -1 || n == -1) && e == null && a == null) {
+            throw new ConfigurationNumberException("参数异常");
+        }
         if (!(e == null && a == null) && !(e != null && a != null)) {
-            throw new ConfigurationException("Wrong number of parameters");
+            throw new ConfigurationNumberException("参数异常");
         }
         return new Configuration(n, r, e, a);
     }

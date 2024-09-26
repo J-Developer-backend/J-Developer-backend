@@ -143,14 +143,10 @@
 
 - 运算数的生成
   - 设计getValue(int limitSize)方法获取自然数，getFraction(int limitSize)方法获取真分数。两个方法都需要指定数值的限制范围，使用产生随机数的方法进行生成。
-
 - 运算符的生成
   - 设计getSign(String sign)方法获取运算符，包括+, −, ×, ÷、=、(、)。
-
 - 题目的生成
-  - 随机确定运算数的个数。
-  - 根据运算数个数确定是否产生括号，若可以产生，随机确定其位置。
-  - 完成上面的配置后，通过调用getValue(int limitSize)、getFraction(int limitSize)、getSign(String sign)方法，从左往右生成四则运算题目。
+  - 设计generateExpression(int limitSize)方法生成题目，随机确定运算数的个数，根据运算数个数确定是否产生括号，若可以产生，随机确定其位置。完成上面的配置后，通过调用getValue(int limitSize)、getFraction(int limitSize)、getSign(String sign)方法，从左往右生成四则运算题目。
 
 ## 4、题目校验
 
@@ -166,6 +162,7 @@
 - 后缀表达式计算
   - 设计getExpressionsRPN(List<Expression> expressions)获取题目的后缀表达式，避免由于括号造成的繁琐计算。
   - 设计computeRPN(List<Expression> expressions)计算题目的后缀表达式，最终得到题目的结果。
+  - 设计computeExpression(List<Expression> expressions)方法条用以上方法实现四则运算表达式的计算。
 - 四则运算
   - 加法：设计plus(Expression ex1, Expression ex2)方法实现。
   - 减法：设计minus(Expression ex1, Expression ex2)方法实现。
@@ -179,21 +176,27 @@
 在ExpressionUtil工具类还提供了表达式集合与字符串的转换方法，有如下功能：
 
 - 题目转字符串
+  
+  - 设计getString(Expression expression)方法实现单个表达式转换为字符串。
+  
   - 设计parseString(List<Expression> expressionList)方法实现表达式集合转换为字符串。
+  
 - 字符串转表达式集合
   - 自然数：设计parseValue(String valueStr)方法将自然数字符串转自然数表达式。
   - 分数：设计parseFraction(String fractionStr)方法将分数字符串转分数表达式。
-  - 运算符：直接判别运算符，并将其转为运算符表达式。
+  - 运算符：直接判别运算符，并调用getSign(String sign)方法。
+  - 单个表达式：设计parseOneExpression(String valueStr)方法通过不同条件调用parseValue(String valueStr)、parseFraction(String fractionStr)、getSign(String sign)返回单个表达式对象。
   - 题目：设计parseExpression(String expressionStr)方法将题目字符串转为表达式集合。
 
 ## 7、文件读写
 
 设计FileUtil工具类完成文件的读写操作，有如下功能：
 
-- 读：设计readProblem(String filePath)方法读取题目。
+- 读：设计readProblemOrAnswer(String filePath)方法读取题目或者答案。
 - 写：
   - 设计writeProblem(String filePath, List<List<Expression>> problemList)方法输出题目
   - 设计writeAnswer(String filePath, List<Expression> answerList)方法输出答案
+  - 设计writeResult(String filePath, List<Integer> correctList, List<Integer> wrongList)方法输出题目与答案的正误统计结果。
 - 删：设计deleteFile(String filePath)方法删除历史文件
 
 # 六、代码说明
