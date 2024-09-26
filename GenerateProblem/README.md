@@ -190,8 +190,11 @@
 
 设计FileUtil工具类完成文件的读写操作，有如下功能：
 
-- 读：
+- 读：设计readProblem(String filePath)方法读取题目。
 - 写：
+  - 设计writeProblem(String filePath, List<List<Expression>> problemList)方法输出题目
+  - 设计writeAnswer(String filePath, List<Expression> answerList)方法输出答案
+- 删：设计deleteFile(String filePath)方法删除历史文件
 
 # 六、代码说明
 
