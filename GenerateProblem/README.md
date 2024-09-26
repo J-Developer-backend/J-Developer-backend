@@ -150,7 +150,11 @@
 
 ## 4、题目校验
 
-- 
+设计CheckUtil工具类提供方法实现新生成的题目与已生成的题目进行判重，有如下功能：
+
+- 判重
+  - 设计checkTowProblems(List<Expression> problem1, List<Expression> problem2)方法实现两个题目的判重。
+  - 设计checkExpression(List<Expression> newProblem, List<List<Expression>> sameAnswerProblems)方法实现新生成的题目与已生成的答案相同的题目进行判重。
 
 ## 5、题目计算
 

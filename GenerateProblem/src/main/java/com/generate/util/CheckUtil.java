@@ -2,8 +2,6 @@ package com.generate.util;
 
 import com.generate.common.Expression;
 import com.generate.common.SignConstant;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class CheckUtil {
@@ -27,7 +25,10 @@ public class CheckUtil {
         for (List<Expression> sameAnswerProblem : sameAnswerProblems) {
             //判断两个题目是否重复
             boolean b = checkTowProblems(newProblem, sameAnswerProblem);
-            if (b) return true;
+            if (b) {
+                System.out.println(ExpressionUtil.parseString(newProblem) + "=====" + ExpressionUtil.parseString(sameAnswerProblem));
+                return true;
+            }
         }
         return false;
     }
@@ -39,46 +40,24 @@ public class CheckUtil {
      * @return 是否重复
      */
     public static boolean checkTowProblems(List<Expression> problem1, List<Expression> problem2) {
-        List<Expression> newProblem = new ArrayList<>(List.copyOf(problem1));
-        List<Expression> sameAnswerProblems = new ArrayList<>(List.copyOf(problem2));
-        addParenthesisToProblem(newProblem);
-        addParenthesisToProblem(sameAnswerProblems);
-
-        return false;
-    }
-
-    /**
-     * 给题目的添加括号
-     * @param problem 题目
-     */
-    public static void addParenthesisToProblem(List<Expression> problem) {
-        //先给乘号加
-        for (int i = 0; i < problem.size(); i++) {
-            if (problem.get(i).equals(ExpressionUtil.getSign(SignConstant.MULTIPLY))) {
-                addParenthesisToProblem(i, problem);
+        if (!problem2.contains(ExpressionUtil.getSign(SignConstant.PLUS))
+                && !problem2.contains(ExpressionUtil.getSign(SignConstant.MULTIPLY))) {
+            return false;
+        }
+        Expression e1 = new Expression(true, false, false, 0, 0, 1, null);
+        Expression e2 = new Expression(true, false, false, 0, 0, 1, null);
+        for (Expression expression : problem1) {
+            if (expression.isValue() || expression.isFraction()) {
+                e1 = ComputeUtil.plus(e1, expression);
             }
         }
-        //再给加号加
-        for (int i = 0; i < problem.size(); i++) {
-            if (problem.get(i).equals(ExpressionUtil.getSign(SignConstant.PLUS))) {
-                addParenthesisToProblem(i, problem);
+        for (Expression expression : problem2) {
+            if (expression.isValue() || expression.isFraction()) {
+                e2 = ComputeUtil.multiply(e2, expression);
             }
         }
+        return e1.equals(e2);
     }
 
-    /**
-     * 给题目的添加括号
-     * @param i 加号或乘号下标
-     * @param problem 题目
-     */
-    public static void addParenthesisToProblem(int i, List<Expression> problem) {
-        if (i - 2 >= 0
-                && !problem.get(i - 2).equals(ExpressionUtil.getSign(SignConstant.LEFT_PARENTHESES))
-                && i + 2 < problem.size()
-                && !problem.get(i + 2).equals(ExpressionUtil.getSign(SignConstant.RIGHT_PARENTHESES))) {
-            problem.add(i - 2, ExpressionUtil.getSign(SignConstant.LEFT_PARENTHESES));
-            problem.add(i + 2, ExpressionUtil.getSign(SignConstant.RIGHT_PARENTHESES));
-        }
-    }
 
 }

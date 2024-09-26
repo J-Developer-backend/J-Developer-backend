@@ -100,8 +100,8 @@ public class Main {
             }
             total++;
             //题目生成可行性判断
-            if (1.0 * failed / total > 0.8) {
-                throw new NumberOrLimitException("题目生成不良率达到0.8，所以r值不合理，以至于不能生成指定数量的题目，更改n、r值或重新运行");
+            if (1.0 * failed / total > 0.9) {
+                throw new NumberOrLimitException("题目生成不良率达到0.9，所以r值不合理，以至于不能生成指定数量的题目，更改n、r值或重新运行");
             }
         }
         System.out.println("不良率：" + 1.0 * failed / total);
