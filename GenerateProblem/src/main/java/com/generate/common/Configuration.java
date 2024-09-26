@@ -1,5 +1,7 @@
 package com.generate.common;
 
+import com.generate.exception.ConfigurationException;
+
 public class Configuration {
 
     private final int n;
@@ -16,15 +18,14 @@ public class Configuration {
 
     /**
      * 解析参数
-     * @param paramStr 参数
+     * @param params 参数
      * @return 参数对象
      */
-    public static Configuration parseConfiguration(String paramStr) {
-        String[] params = paramStr.split(" ");
-        if (params.length % 2 == 1) {
-            return null;
+    public static Configuration parseConfiguration(String[] params) throws ConfigurationException {
+        if (params.length % 2 != 0) {
+            throw new ConfigurationException("Wrong number of parameters");
         }
-        int n = 0, r = 0;
+        int n = -1, r = -1;
         String e = null, a = null;
         for (int i = 0; i < params.length; i += 2) {
             switch (params[i]) {
@@ -33,9 +34,12 @@ public class Configuration {
                 case "-e" -> e = params[i + 1];
                 case "-a" -> a = params[i + 1];
                 default -> {
-                    return null;
+                    throw new ConfigurationException("Wrong number of parameters");
                 }
             }
+        }
+        if (!(e == null && a == null) && !(e != null && a != null)) {
+            throw new ConfigurationException("Wrong number of parameters");
         }
         return new Configuration(n, r, e, a);
     }

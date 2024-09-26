@@ -19,13 +19,18 @@ public class FileUtil {
         List<String> list = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(filePath));
-            String line;
+            String line, s;
             while ((line = br.readLine()) != null) {
                 if (line.contains("’")) {
                     System.out.println("分数中的“'”应为英文的单引号");
                     throw new RuntimeException();
                 }
-                list.add(line);
+                if (line.contains("=")) {
+                    s = line.substring(line.indexOf('.') + 1, line.indexOf('=') - 1);
+                } else {
+                    s = line.substring(line.indexOf('.') + 1);
+                }
+                list.add(s);
             }
         } catch (FileNotFoundException e) {
             System.out.println(filePath + "不存在");
@@ -89,7 +94,7 @@ public class FileUtil {
      * @param correctList 正确题号
      * @param wrongList 错误题号
      */
-    public static void writeAnswer(String filePath, List<Integer> correctList, List<Integer> wrongList) {
+    public static void writeResult(String filePath, List<Integer> correctList, List<Integer> wrongList) {
         StringJoiner sj1 = new StringJoiner("，", "(", ")");
         StringJoiner sj2 = new StringJoiner("，", "(", ")");
         for (Integer id : correctList) {

@@ -147,30 +147,37 @@ public class ExpressionUtil {
         if (expressionStr == null || expressionStr.isEmpty()) return null;
         String[] expressions = expressionStr.split(" ");
         for (String valueStr : expressions) {
-            Expression expression;
-            if (valueStr.contains("/")) {
-                expression = parseFraction(valueStr);
-            } else if (valueStr.equals(SignConstant.LEFT_PARENTHESES)) {
-                expression = getSign(SignConstant.LEFT_PARENTHESES);
-            } else if (valueStr.equals(SignConstant.RIGHT_PARENTHESES)) {
-                expression = getSign(SignConstant.RIGHT_PARENTHESES);
-            } else if (valueStr.equals(SignConstant.EQUAL)) {
-                expression = getSign(SignConstant.EQUAL);
-            } else if (valueStr.equals(SignConstant.PLUS)) {
-                expression = getSign(SignConstant.PLUS);
-            } else if (valueStr.equals(SignConstant.MINUS)) {
-                expression = getSign(SignConstant.MINUS);
-            } else if (valueStr.equals(SignConstant.MULTIPLY)) {
-                expression = getSign(SignConstant.MULTIPLY);
-            } else if (valueStr.equals(SignConstant.DIVIDE)) {
-                expression = getSign(SignConstant.DIVIDE);
-            } else {
-                expression = parseValue(valueStr);
-            }
-            expressionList.add(expression);
+            if (valueStr == null || valueStr.isEmpty()) continue;
+            expressionList.add(parseOneExpression(valueStr));
         }
         return expressionList;
     }
+
+    public static Expression parseOneExpression(String valueStr) {
+        Expression expression;
+        valueStr = valueStr.replaceAll(" ", "");
+        if (valueStr.contains("/")) {
+            expression = parseFraction(valueStr);
+        } else if (valueStr.equals(SignConstant.LEFT_PARENTHESES)) {
+            expression = getSign(SignConstant.LEFT_PARENTHESES);
+        } else if (valueStr.equals(SignConstant.RIGHT_PARENTHESES)) {
+            expression = getSign(SignConstant.RIGHT_PARENTHESES);
+        } else if (valueStr.equals(SignConstant.EQUAL)) {
+            expression = getSign(SignConstant.EQUAL);
+        } else if (valueStr.equals(SignConstant.PLUS)) {
+            expression = getSign(SignConstant.PLUS);
+        } else if (valueStr.equals(SignConstant.MINUS)) {
+            expression = getSign(SignConstant.MINUS);
+        } else if (valueStr.equals(SignConstant.MULTIPLY)) {
+            expression = getSign(SignConstant.MULTIPLY);
+        } else if (valueStr.equals(SignConstant.DIVIDE)) {
+            expression = getSign(SignConstant.DIVIDE);
+        } else {
+            expression = parseValue(valueStr);
+        }
+        return expression;
+    }
+
 
     /**
      * 自然数抽象成表达式
