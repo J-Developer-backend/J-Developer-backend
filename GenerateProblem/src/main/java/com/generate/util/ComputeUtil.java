@@ -163,7 +163,7 @@ public class ComputeUtil {
      * @param denominator 分母
      * @return 表达式，null表示不合法
      */
-    public static Expression getFraction(int numerator, int denominator) {
+    public static Expression simplyFraction(int numerator, int denominator) {
         if (numerator < 0) {
             return null;
         }
@@ -189,7 +189,7 @@ public class ComputeUtil {
         int newDenominator = lcm(ex1.getDenominator(), ex2.getDenominator());
         int newNumerator = (ex1.getValue() * ex1.getDenominator() + ex1.getNumerator()) * (newDenominator / ex1.getDenominator())
                 + (ex2.getValue() * ex2.getDenominator() + ex2.getNumerator()) * (newDenominator / ex2.getDenominator());
-        return getFraction(newNumerator, newDenominator);
+        return simplyFraction(newNumerator, newDenominator);
     }
 
     /**
@@ -202,7 +202,7 @@ public class ComputeUtil {
         int newDenominator = lcm(ex1.getDenominator(), ex2.getDenominator());
         int newNumerator = (ex1.getValue() * ex1.getDenominator() + ex1.getNumerator()) * (newDenominator / ex1.getDenominator())
                 - (ex2.getValue() * ex2.getDenominator() + ex2.getNumerator()) * (newDenominator / ex2.getDenominator());
-        return getFraction(newNumerator, newDenominator);
+        return simplyFraction(newNumerator, newDenominator);
     }
 
     /**
@@ -214,7 +214,7 @@ public class ComputeUtil {
     public static Expression multiply(Expression ex1, Expression ex2) {
         int newDenominator = ex1.getDenominator() * ex2.getDenominator();
         int newNumerator = (ex1.getValue() * ex1.getDenominator() + ex1.getNumerator()) * (ex2.getValue() * ex2.getDenominator() + ex2.getNumerator());
-        return getFraction(newNumerator, newDenominator);
+        return simplyFraction(newNumerator, newDenominator);
     }
 
     /**
@@ -231,7 +231,7 @@ public class ComputeUtil {
         int numerator2 = ex2.getValue() * ex2.getDenominator() + ex2.getNumerator();
         int newDenominator = ex1.getDenominator() * numerator2;
         int newNumerator = numerator1 * ex2.getDenominator();
-        return getFraction(newNumerator, newDenominator);
+        return simplyFraction(newNumerator, newDenominator);
     }
 
 }

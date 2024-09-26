@@ -128,29 +128,70 @@
 
 # 五、设计实现过程
 
-## 1、四则运算题目设计
+## 1、四则运算表达式
 
+- 将四则运算题目的操作数和运算符单独视为一个对象，设计Expression类封装操作数或运算符，四则运算题目就是Expression对象的集合。
 
+## 2、参数控制
 
-## 2、参数封装
-
-
+- 设计Configuration类对输入的参数进行封装，利用Configuration对象完成参数控制。
+- 设计parseConfiguration(String paramStr)方法解析输入的参数并封装成Configuration对象。
 
 ## 3、题目生成
 
+设计ExpressionUtil工具类提供题目生成所需的所有方法，有如下功能：
 
+- 运算数的生成
+  - 设计getValue(int limitSize)方法获取自然数，getFraction(int limitSize)方法获取真分数。两个方法都需要指定数值的限制范围，使用产生随机数的方法进行生成。
+
+- 运算符的生成
+  - 设计getSign(String sign)方法获取运算符，包括+, −, ×, ÷、=、(、)。
+
+- 题目的生成
+  - 随机确定运算数的个数。
+  - 根据运算数个数确定是否产生括号，若可以产生，随机确定其位置。
+  - 完成上面的配置后，通过调用getValue(int limitSize)、getFraction(int limitSize)、getSign(String sign)方法，从左往右生成四则运算题目。
 
 ## 4、题目校验
 
-
+- 
 
 ## 5、题目计算
 
+设计ComputeUtil工具类提供实现计算功能的方法，有如下功能：
 
+- 支撑计算
+  - 设计gcd(int a, int b)方法获取最大公约数，用于约分。
+  - 设计lcm(int a, int b)方法获取最小公倍数，用于同分。
+- 后缀表达式计算
+  - 设计getExpressionsRPN(List<Expression> expressions)获取题目的后缀表达式，避免由于括号造成的繁琐计算。
+  - 设计computeRPN(List<Expression> expressions)计算题目的后缀表达式，最终得到题目的结果。
+- 四则运算
+  - 加法：设计plus(Expression ex1, Expression ex2)方法实现。
+  - 减法：设计minus(Expression ex1, Expression ex2)方法实现。
+  - 乘法：设计multiply(Expression ex1, Expression ex2)方法实现。
+  - 除法：设计divide(Expression ex1, Expression ex2)方法实现。
+- 分数化简
+  - 设计simplyFraction(int numerator, int denominator)方法将分数numerator/denominator化简。
 
-## 6、文件读写
+## 6、题目与字符串的转换
 
+在ExpressionUtil工具类还提供了表达式集合与字符串的转换方法，有如下功能：
 
+- 题目转字符串
+  - 设计parseString(List<Expression> expressionList)方法实现表达式集合转换为字符串。
+- 字符串转表达式集合
+  - 自然数：设计parseValue(String valueStr)方法将自然数字符串转自然数表达式。
+  - 分数：设计parseFraction(String fractionStr)方法将分数字符串转分数表达式。
+  - 运算符：直接判别运算符，并将其转为运算符表达式。
+  - 题目：设计parseExpression(String expressionStr)方法将题目字符串转为表达式集合。
+
+## 7、文件读写
+
+设计FileUtil工具类完成文件的读写操作，有如下功能：
+
+- 读：
+- 写：
 
 # 六、代码说明
 

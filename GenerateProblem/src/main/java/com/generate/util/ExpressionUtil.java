@@ -59,7 +59,7 @@ public class ExpressionUtil {
             return String.valueOf(expression.getValue());
         } else if (expression.isFraction()) {
             if (expression.getValue() == 0) return expression.getNumerator() + "/" + expression.getDenominator();
-            else return expression.getValue() + "’" + expression.getNumerator() + "/" + expression.getDenominator();
+            else return expression.getValue() + "'" + expression.getNumerator() + "/" + expression.getDenominator();
         } else if (expression.isOperationSign()) {
             return expression.getOperationSign();
         }
@@ -191,12 +191,12 @@ public class ExpressionUtil {
         StringBuilder valueStr = new StringBuilder();
         StringBuilder numeratorStr = new StringBuilder();
         StringBuilder denominatorStr = new StringBuilder();
-        boolean hasValue = fractionStr.contains("’"), hasNumerator = false;
+        boolean hasValue = fractionStr.contains("'"), hasNumerator = false;
         if (!hasValue) {
             valueStr.append("0");
         }
         for (int i = 0; i < fractionStr.length(); i++) {
-            if (fractionStr.charAt(i) == '‘') {
+            if (fractionStr.charAt(i) == '\'') {
                 hasValue = false;
                 hasNumerator = true;
                 continue;

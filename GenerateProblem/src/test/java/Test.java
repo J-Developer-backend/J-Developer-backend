@@ -2,10 +2,9 @@ import com.generate.common.Expression;
 import com.generate.util.CheckUtil;
 import com.generate.util.ComputeUtil;
 import com.generate.util.ExpressionUtil;
+import com.generate.util.FileUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Test {
 
@@ -34,6 +33,11 @@ public class Test {
                 cnt++;
             }
         }
+        Set<Map.Entry<Expression, List<List<Expression>>>> entries = map.entrySet();
+        for (Map.Entry<Expression, List<List<Expression>>> entry : entries) {
+            FileUtil.writeProblem("p.txt", entry.getValue());
+        }
+        FileUtil.writeAnswer("a.txt", map.keySet().stream().toList());
         System.out.println(cnt);
         System.out.println(a);
         System.out.println(b);
@@ -50,5 +54,6 @@ public class Test {
         }
         System.out.println(split.length);
     }
+
 
 }
