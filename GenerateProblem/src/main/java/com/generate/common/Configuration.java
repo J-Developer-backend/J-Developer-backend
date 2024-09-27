@@ -10,7 +10,7 @@ public class Configuration {
     private final String e;
     private final String a;
 
-    public Configuration(int n, int r, String e, String a) throws ConfigurationNumberException {
+    public Configuration(int n, int r, String e, String a) {
         this.n = n;
         this.r = r;
         this.e = e;

@@ -107,6 +107,9 @@ public class FileUtil {
             fos.write(correct.getBytes());
             fos.write(wrong.getBytes());
             fos.close();
+            System.out.println("统计结果：");
+            System.out.print(correct);
+            System.out.print(wrong);
         } catch (FileNotFoundException e) {
             System.out.println(filePath + "不存在");
         } catch (IOException e) {
@@ -123,7 +126,7 @@ public class FileUtil {
         if (file.exists()) {
             boolean delete = file.delete();
             if (delete) {
-                System.out.println("已清除历史文件");
+                System.out.println("已清除历史文件" + filePath);
             }
         }
     }

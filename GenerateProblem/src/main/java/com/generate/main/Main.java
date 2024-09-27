@@ -9,7 +9,6 @@ import com.generate.util.CheckUtil;
 import com.generate.util.ComputeUtil;
 import com.generate.util.ExpressionUtil;
 import com.generate.util.FileUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,10 @@ import java.util.Map;
 
 public class Main {
 
+    //总题目生成数
+    private static int total = 0;
+    //不良题目数
+    private static int failed = 0;
     //存放题目
     private static final List<List<Expression>> problems = new ArrayList<>();
     //存放答案
@@ -65,6 +68,7 @@ public class Main {
                 FileUtil.writeResult("Grade.txt", correct, wrong);
             }
         } catch (ConfigurationNumberException | NumberOrLimitException | ProblemException e) {
+            System.out.println("题目总生成数" + total + "，不良率：" + 1.0 * failed / total);
             throw new RuntimeException(e);
         }
     }
@@ -78,7 +82,7 @@ public class Main {
     public static void generateProblem(int n, int r) throws NumberOrLimitException {
         //缓存答案以及题目，用于判重
         Map<Expression, List<List<Expression>>> problemMap = new HashMap<>();
-        int num = 0, total = 0, failed = 0;
+        int num = 0, id = 1;
         while (num < n) {
             List<Expression> problem = ExpressionUtil.generateExpression(r);
             Expression answer = ComputeUtil.computeExpression(problem);
@@ -86,6 +90,7 @@ public class Main {
             if (answer != null && !CheckUtil.checkExpression(problem, problemMap.get(answer))) {
                 problems.add(problem);
                 answers.add(answer);
+                System.out.println("题目" + id + "：" + ExpressionUtil.parseString(problem) + ExpressionUtil.getString(answer));
                 List<List<Expression>> sameAnswerProblems = problemMap.get(answer);
                 if (sameAnswerProblems == null) {
                     sameAnswerProblems = new ArrayList<>();
@@ -95,21 +100,21 @@ public class Main {
                     sameAnswerProblems.add(problem);
                 }
                 num++;
+                id++;
             } else {
                 failed++;
             }
             total++;
             //题目生成可行性判断
-            if (1.0 * failed / total > 0.9) {
-                throw new NumberOrLimitException("题目生成不良率达到0.9，所以r值不合理，以至于不能生成指定数量的题目，更改n、r值或重新运行");
+            if (1.0 * failed / total > 0.9 && 1.0 * total / n > 10) {
+                throw new NumberOrLimitException("已生成" + total + "道题目，但不良率达到0.9，可能由于n、r值不合理，以至于不能生成指定数量的题目，更改n、r值或重新运行");
             }
         }
-        System.out.println("不良率：" + 1.0 * failed / total);
     }
 
 
     /**
-     * 读取题目
+     * 读取题目及答案
      * @param problemPath 题目文件路径
      * @param answerPath 答案文件路径
      */
@@ -121,6 +126,11 @@ public class Main {
         }
         for (String answerString : answerStrings) {
             answers.add(ExpressionUtil.parseOneExpression(answerString));
+        }
+        System.out.println("读取题目以及答案：");
+        for (int i = 0; i < problems.size(); i++) {
+            System.out.println("题目" + (i + 1) + "：" + ExpressionUtil.parseString(problems.get(i))
+                    + ExpressionUtil.getString(answers.get(i)));
         }
     }
 

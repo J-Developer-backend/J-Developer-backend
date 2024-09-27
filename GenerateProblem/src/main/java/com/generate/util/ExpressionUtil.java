@@ -149,15 +149,18 @@ public class ExpressionUtil {
         for (String valueStr : expressions) {
             boolean addRightParentheses = false;
             if (valueStr == null || valueStr.isEmpty()) continue;
+            //左括号处理
             if (valueStr.contains(SignConstant.LEFT_PARENTHESES)) {
                 expressionList.add(getSign(SignConstant.LEFT_PARENTHESES));
                 valueStr = valueStr.replace(SignConstant.LEFT_PARENTHESES, "");
             }
+            //右括号处理
             if (valueStr.contains(SignConstant.RIGHT_PARENTHESES)) {
                 addRightParentheses = true;
                 valueStr = valueStr.replace(SignConstant.RIGHT_PARENTHESES, "");
             }
             expressionList.add(parseOneExpression(valueStr));
+            //补上右括号
             if (addRightParentheses) {
                 expressionList.add(getSign(SignConstant.RIGHT_PARENTHESES));
             }
@@ -165,6 +168,11 @@ public class ExpressionUtil {
         return expressionList;
     }
 
+    /**
+     * 单个表达式的转换
+     * @param valueStr 表达式字符串
+     * @return 表达式对象
+     */
     public static Expression parseOneExpression(String valueStr) {
         Expression expression;
         valueStr = valueStr.replaceAll(" ", "");
@@ -203,9 +211,13 @@ public class ExpressionUtil {
      * @return 表达式
      */
     public static Expression parseFraction(String fractionStr) {
+        //分数前的值
         StringBuilder valueStr = new StringBuilder();
+        //分子
         StringBuilder numeratorStr = new StringBuilder();
+        //分母
         StringBuilder denominatorStr = new StringBuilder();
+        //是否有'前的数判别
         boolean hasValue = fractionStr.contains("'"), hasNumerator = false;
         if (!hasValue) {
             valueStr.append("0");
