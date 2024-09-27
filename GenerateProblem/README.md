@@ -5,11 +5,13 @@
 # 一、项目开发人员以及仓库地址
 ## 1、开发人员
 
-
+- 3122004739——黄健
 
 ## 2、项目仓库地址
 
+<https://github.com/J-Developer-backend/J-Developer-backend>
 
+该项目位于GenerateProblem文件夹中
 
 # 二、PSP表格记录各模块预估耗时以及实际耗时
 | PSP2.1                                        | Personal Software Process Stages               | 预估耗时（分钟） | 实际耗时（分钟） |
@@ -154,7 +156,7 @@
 
 - 判重
   - 设计checkTowProblems(List<Expression> problem1, List<Expression> problem2)方法实现两个题目的判重。
-  - 设计checkExpression(List<Expression> newProblem, List<List<Expression>> sameAnswerProblems)方法实现新生成的题目与已生成的答案相同的题目进行判重。
+  - 设计checkExpression(List<List<Expression>> problem)方法实现新生成的题目与已生成的答案相同的题目进行判重。
 
 ## 5、题目计算
 
@@ -205,11 +207,175 @@
 
 # 六、代码说明
 
+- 题目生成
 
+  - 思路：
+
+    - 直接确定运算数的个数，随后运算符的个数也就确定了，因为每个运算数的后面必然有一个运算符，最后确定是否要加括号以及其位置。因为四则运算题目的运算符不允许超过3个，也就是运算数不能超过4个，所以可以随机产生2到4个的运算数，再随机确定括号，最后从左往右生成题目。
+
+  - 代码实现
+
+      ```java
+      	/**
+           * 生成四则运算表达式
+           * @param limitSize 数值限制范围
+           * @return 构成四则运算表达式的表达式集合
+           */
+          public static List<Expression> generateExpression(int limitSize) {
+              List<Expression> expressionList = new ArrayList<>();
+              //运算数个数
+              int expressionNum = RandomUtil.randInt(2, 4);
+              //是否要括号
+              boolean hasParentheses = expressionNum > 2 && RandomUtil.randInt(0, 1) == 1;
+              //括号位置，第index个运算数的左或右
+              int leftParenthesesIndex = -1;
+              int rightParenthesesIndex = -1;
+              if (hasParentheses) {
+                  leftParenthesesIndex = RandomUtil.randInt(1, expressionNum - 1);
+                  rightParenthesesIndex = RandomUtil.randInt(leftParenthesesIndex + 1, expressionNum);
+              }
+              //如果括号括住整个表达式则不需要加括号
+              if (leftParenthesesIndex == 1 && rightParenthesesIndex == expressionNum) {
+                  leftParenthesesIndex = -1;
+                  rightParenthesesIndex = -1;
+              }
+              //逐个生成运算数以及运算符，并根据需要添加括号
+              for (int i = 1; i <= expressionNum ; i++) {
+                  //添加左括号
+                  if (i == leftParenthesesIndex) {
+                      expressionList.add(getSign(SignConstant.LEFT_PARENTHESES));
+                  }
+                  //生成运算数
+                  boolean valueOrFraction = RandomUtil.randInt(0, 1) == 1;
+                  if (valueOrFraction) {
+                      expressionList.add(getValue(limitSize));
+                  } else if (limitSize > 2) {
+                      expressionList.add(getFraction(limitSize));
+                  } else {    //限制参数等于1或2时不存在合理的真分数
+                      return null;
+                  }
+                  //添加右括号
+                  if (i == rightParenthesesIndex) {
+                      expressionList.add(getSign(SignConstant.RIGHT_PARENTHESES));
+                  }
+                  //添加在运算数之后的运算符，最后一个运算数不用添加
+                  if (i == expressionNum) break;
+                  int operationSignIndex;
+                  if (limitSize == 1) {
+                      operationSignIndex = RandomUtil.randInt(0, signs.length - 2);
+                  } else {
+                      operationSignIndex = RandomUtil.randInt(0, signs.length - 1);
+                  }
+                  expressionList.add(getSign(signs[operationSignIndex]));
+              }
+              //最后添加等号
+              expressionList.add(getSign(SignConstant.EQUAL));
+              return expressionList;
+          }
+      ```
+
+- 题目计算
+
+  - 思路：
+    - 由于部分题目存在括号，可以考虑将题目转化为后缀表达式进行计算。
+    
+  - 代码实现
+
+    ```java
+        /**
+         * 求取表达式集合的答案表达式
+         *
+         * @param expressions 表达式集合
+         * @return 答案表达式
+         */
+        public static Expression computeExpression(List<Expression> expressions) {
+            //不合理的表达式集合
+            if (expressions == null || expressions.isEmpty()) {
+                return null;
+            }
+            //获取后缀表达式
+            List<Expression> expressionsRPN = getExpressionsRPN(expressions);
+            //计算后缀表达式并返回
+            return computeRPN(expressionsRPN);
+        }
+    ```
+
+- 题目校验
+
+  - 思路：
+
+    - 首先考虑到重复的题目答案必然相同，并且运算符、运算数之和都相同，因此对于每个新生成的题目，都只需与具有相同答案的题目进行判重即可，对于判重的方法，秉持宁判错不放过的思想，只有满足答案、运算符、运算数之和相同的两个题目都认定为重复的题目。虽然影响程序性能，但可以确保程序正确性。
+
+  - 代码实现：
+
+    ```java
+    private static int plusNum = 0, multiplyNum = 0, valueNum = 0, minusNum = 0, divideNum = 0;
+        private static Expression valueSum = new Expression(true, false, false, 0, 0, 1, null);
+    
+        /**
+         * 判重
+         * @param newProblem 新题目
+         * @param sameAnswerProblems 以生成的相同答案的题目
+         * @return 是否重复
+         */
+        public static boolean checkExpression(List<Expression> newProblem, List<List<Expression>> sameAnswerProblems) {
+            //无相同答案的题目，不会重复
+            if(sameAnswerProblems == null || sameAnswerProblems.isEmpty()) {
+                return false;
+            }
+            valueNum = 0;
+            plusNum = 0;
+            multiplyNum = 0;
+            divideNum = 0;
+            minusNum = 0;
+            for (Expression e : newProblem) {
+                if (e.isValue() || e.isFraction()) {
+                    valueNum++;
+                    valueSum = ComputeUtil.plus(valueSum, e);
+                } else if (e.isOperationSign() && e.getOperationSign().equals(SignConstant.PLUS)) {
+                    plusNum++;
+                } else if (e.isOperationSign() && e.getOperationSign().equals(SignConstant.MULTIPLY)) {
+                    multiplyNum++;
+                } else if (e.isOperationSign() && e.getOperationSign().equals(SignConstant.DIVIDE)) {
+                    divideNum++;
+                } else if (e.isOperationSign() && e.getOperationSign().equals(SignConstant.MINUS)) {
+                    minusNum++;
+                }
+            }
+            //新题目没有加号和乘号，不会重复
+            if (plusNum == 0 && multiplyNum == 0) {
+                return false;
+            }
+            for (List<Expression> sameAnswerProblem : sameAnswerProblems) {
+                //判断两个题目是否重复
+                boolean b = checkTowProblems(sameAnswerProblem);
+                if (b) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    ```
 
 # 七、测试运行
 
+## 1、题目生成测试
 
+- 参数 ```java -jar .\main.jar -n 10 -r 10```
+
+- 结果
+
+  ![image-20240927211324263](C:\Users\J\AppData\Roaming\Typora\typora-user-images\image-20240927211324263.png)
+
+## 2、题目正误测试
+
+- 参数
+
+  ![image-20240927211610384](C:\Users\J\AppData\Roaming\Typora\typora-user-images\image-20240927211610384.png)
+
+- 结果
+
+  ![image-20240927211639718](C:\Users\J\AppData\Roaming\Typora\typora-user-images\image-20240927211639718.png)
 
 # 八、项目小结
 

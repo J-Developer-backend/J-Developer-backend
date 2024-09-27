@@ -44,6 +44,7 @@ public class Main {
                 //将题目输出到文件中
                 FileUtil.writeProblem("Exercises.txt", problems);
                 FileUtil.writeAnswer("Answers.txt", answers);
+                System.out.println("题目总生成数" + total + "，不良率：" + 1.0 * failed / total);
             } else {
                 //读取题目和答案
                 read(configuration.getE(), configuration.getA());
