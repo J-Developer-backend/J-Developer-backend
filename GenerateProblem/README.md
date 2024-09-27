@@ -18,20 +18,20 @@
 | :-------------------------------------------- | :--------------------------------------------- | :--------------: | :--------------: |
 | Planning                                      | 计划                                           |        30        |        35        |
 | &middot;Estimate                              | &middot;估计这个任务需要多少时间               |        30        |        35        |
-| Development                                   | 开发                                           |       930        |                  |
-| &middot;Analysis                              | &middot;需求分析（包括学习新技能）             |       120        |                  |
-| &middot;Design Spec                           | &middot;生成设计文档                           |        30        |                  |
-| &middot;Design Review                         | &middot;设计复审（和同事审核设计方案）         |        30        |                  |
-| &middot;CodingStandard                        | &middot;代码规范（为目前的开发制定合适的规范） |        30        |                  |
-| &middot;Design                                | &middot;具体设计                               |       300        |                  |
-| &middot;Coding                                | &middot;具体编码                               |       300        |                  |
-| &middot;Code Review                           | &middot;代码复审                               |        60        |                  |
-| &middot;Test                                  | &middot;测试（自我测试，修改代码，提交修改）   |        60        |                  |
-| reporting                                     | 报告                                           |        90        |                  |
-| &middot;Test Repor                            | &middot;测试报告                               |        30        |                  |
-| &middot;Size Measurement                      | &middot;计算工作量                             |        30        |                  |
-| &middot;Postmortem & Process Improvement Plan | &middot;事后总结，并提出过程改进计划           |        30        |                  |
-| 合计                                          |                                                |       1050       |                  |
+| Development                                   | 开发                                           |       930        |       1710       |
+| &middot;Analysis                              | &middot;需求分析（包括学习新技能）             |       120        |        60        |
+| &middot;Design Spec                           | &middot;生成设计文档                           |        30        |        60        |
+| &middot;Design Review                         | &middot;设计复审（和同事审核设计方案）         |        30        |        30        |
+| &middot;CodingStandard                        | &middot;代码规范（为目前的开发制定合适的规范） |        30        |        60        |
+| &middot;Design                                | &middot;具体设计                               |       300        |       600        |
+| &middot;Coding                                | &middot;具体编码                               |       300        |       600        |
+| &middot;Code Review                           | &middot;代码复审                               |        60        |       120        |
+| &middot;Test                                  | &middot;测试（自我测试，修改代码，提交修改）   |        60        |        30        |
+| reporting                                     | 报告                                           |        90        |       120        |
+| &middot;Test Repor                            | &middot;测试报告                               |        30        |        30        |
+| &middot;Size Measurement                      | &middot;计算工作量                             |        30        |        60        |
+| &middot;Postmortem & Process Improvement Plan | &middot;事后总结，并提出过程改进计划           |        30        |        30        |
+| 合计                                          |                                                |       1050       |       1865       |
 
 # 三、需求分析
 
