@@ -91,7 +91,7 @@ public class Main {
             if (answer != null && !CheckUtil.checkExpression(problem, problemMap.get(answer))) {
                 problems.add(problem);
                 answers.add(answer);
-                System.out.println("题目" + id + "：" + ExpressionUtil.parseString(problem) + ExpressionUtil.getString(answer));
+//                System.out.println("题目" + id + "：" + ExpressionUtil.parseString(problem) + ExpressionUtil.getString(answer));
                 List<List<Expression>> sameAnswerProblems = problemMap.get(answer);
                 if (sameAnswerProblems == null) {
                     sameAnswerProblems = new ArrayList<>();
@@ -128,11 +128,11 @@ public class Main {
         for (String answerString : answerStrings) {
             answers.add(ExpressionUtil.parseOneExpression(answerString));
         }
-        System.out.println("读取题目以及答案：");
+        /*System.out.println("读取题目以及答案：");
         for (int i = 0; i < problems.size(); i++) {
             System.out.println("题目" + (i + 1) + "：" + ExpressionUtil.parseString(problems.get(i))
                     + ExpressionUtil.getString(answers.get(i)));
-        }
+        }*/
     }
 
 }
